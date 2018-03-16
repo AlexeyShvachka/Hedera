@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="17D20a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Definition" representedClassName="Definition" syncable="YES" codeGenerationType="class">
+        <attribute name="added" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="folder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="lastUpdate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="willShow" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="best" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Translation" inverseName="bestFor" inverseEntity="Translation" syncable="YES"/>
+        <relationship name="translations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Translation" inverseName="origins" inverseEntity="Translation" syncable="YES"/>
+    </entity>
+    <entity name="Translation" representedClassName="Translation" syncable="YES" codeGenerationType="class">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="bestFor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Definition" inverseName="best" inverseEntity="Definition" syncable="YES"/>
+        <relationship name="origins" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Definition" inverseName="translations" inverseEntity="Definition" syncable="YES"/>
+    </entity>
+    <entity name="Waiting" representedClassName="Waiting" syncable="YES" codeGenerationType="class">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Definition" positionX="-533" positionY="117" width="128" height="150"/>
+        <element name="Translation" positionX="-144" positionY="180" width="128" height="90"/>
+        <element name="Waiting" positionX="-342" positionY="180" width="128" height="60"/>
+    </elements>
+</model>

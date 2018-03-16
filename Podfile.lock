@@ -1,0 +1,28 @@
+PODS:
+  - Nimble (7.0.3)
+  - Quick (1.2.0)
+  - ReactiveCocoa (7.1.0):
+    - ReactiveSwift (~> 3.1)
+  - ReactiveSwift (3.1.0):
+    - Result (~> 3.2)
+  - Result (3.2.4)
+  - SnapKit (4.0.0)
+
+DEPENDENCIES:
+  - Nimble
+  - Quick
+  - ReactiveCocoa (~> 7.0)
+  - ReactiveSwift (~> 3.0)
+  - SnapKit (~> 4.0.0)
+
+SPEC CHECKSUMS:
+  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
+  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+  ReactiveCocoa: 105ad96f6b8711f1ee7d165fc96587479298053b
+  ReactiveSwift: 5b26d2e988fe0eed2daf48c4054d1de74db50184
+  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+
+PODFILE CHECKSUM: 9f21ca95a0cf3310680edc3a2bfae133cde6958e
+
+COCOAPODS: 1.4.0.beta.1
