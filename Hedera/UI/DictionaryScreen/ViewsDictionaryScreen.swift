@@ -4,7 +4,7 @@ import SnapKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class TopPart: UIView{
+class TopShadowContainer: UIView{
     init(_ view: DictionarySearch) {
         super.init(frame: .zero)
         self.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
@@ -22,20 +22,6 @@ class TopPart: UIView{
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
-extension DictionarySearch: UITextFieldDelegate{
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.leftView = nil
-        textField.placeholder = nil
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        textField.leftView = imageView
-        textField.placeholder = "search"
-    }
-}
-
 
 class DictionarySearch: UITextField{
     private let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 5);
@@ -96,7 +82,20 @@ class DictionarySearch: UITextField{
         fatalError("init(coder:) has not been implemented")
     }
 }
-    
+
+extension DictionarySearch: UITextFieldDelegate{
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.leftView = nil
+        textField.placeholder = nil
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        textField.leftView = imageView
+        textField.placeholder = "search"
+    }
+}
+
+
 class DictionaryCollectionView: UICollectionView{
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)

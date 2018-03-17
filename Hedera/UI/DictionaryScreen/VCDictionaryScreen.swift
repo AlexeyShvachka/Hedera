@@ -9,7 +9,7 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
     var collectionView : DictionaryCollectionView!
     var searchBar = DictionarySearch()
     private let layout = DictionaryCollectionLayout()
-    var containerView: TopPart!
+    var searchContainer: TopShadowContainer!
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.searchString <~ searchBar.reactive.continuousTextValues.skipNil()
@@ -19,7 +19,7 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        containerView = TopPart(searchBar)
+        searchContainer = TopShadowContainer(searchBar)
 
         self.view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
 
@@ -28,7 +28,7 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
         collectionView.delegate = self
 
         self.view.addSubview(collectionView)
-        self.view.addSubview(containerView)
+        self.view.addSubview(searchContainer)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(setKeyboardUp),
@@ -40,29 +40,29 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
                                                name: NSNotification.Name.UIKeyboardWillHide,
                                                object: nil)
 
-        containerView.snp.makeConstraints{ make in
+        searchContainer.snp.makeConstraints{ make in
             make.bottom.left.right.equalTo(self.view.safeAreaLayoutGuide)
             make.height.equalTo(70)
         }
 
         collectionView.snp.makeConstraints{ make in
             make.left.right.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(containerView.snp.top)
+            make.bottom.equalTo(searchContainer.snp.top)
         }
     }
+
     @objc func setKeyboardUp(notification: Notification){
         let info = notification.userInfo!
         let keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        containerView.snp.remakeConstraints{ make in
+        searchContainer.snp.remakeConstraints{ make in
             make.bottom.equalToSuperview().inset(keyboardFrame.height)
             make.left.right.equalTo(self.view.safeAreaLayoutGuide)
             make.height.equalTo(70)
         }
-
     }
 
     @objc func dismissKeyboard(){
-        containerView.snp.remakeConstraints{ make in
+        searchContainer.snp.remakeConstraints{ make in
             make.bottom.left.right.equalTo(self.view.safeAreaLayoutGuide)
             make.height.equalTo(70)
         }
@@ -70,7 +70,6 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
 }
 
 extension DictionaryViewController: UICollectionViewDelegate{
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         layout.expandCell(at: indexPath.item)
 
@@ -82,7 +81,6 @@ extension DictionaryViewController: UICollectionViewDelegate{
 }
 
 extension DictionaryViewController : UICollectionViewDataSource{
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return  viewModel.enteties.value.count
     }
