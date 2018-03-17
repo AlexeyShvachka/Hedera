@@ -9,7 +9,7 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
     var collectionView : DictionaryCollectionView!
     var searchBar = DictionarySearch()
     private let layout = DictionaryCollectionLayout()
-
+    var containerView: TopPart!
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.searchString <~ searchBar.reactive.continuousTextValues.skipNil()
@@ -19,9 +19,7 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let header = Header("Dictionary")
-
-        let containerView = TopPart(label: header, search: searchBar )
+        containerView = TopPart(searchBar)
 
         self.view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
 
@@ -31,14 +29,42 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
 
         self.view.addSubview(collectionView)
         self.view.addSubview(containerView)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(setKeyboardUp),
+                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               object: nil)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(dismissKeyboard),
+                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               object: nil)
+
         containerView.snp.makeConstraints{ make in
-            make.top.left.right.equalTo(self.view.safeAreaLayoutGuide)
-            make.height.equalTo(120)
+            make.bottom.left.right.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(70)
         }
 
         collectionView.snp.makeConstraints{ make in
-            make.left.right.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            make.top.equalTo(containerView.snp.bottom)
+            make.left.right.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalTo(containerView.snp.top)
+        }
+    }
+    @objc func setKeyboardUp(notification: Notification){
+        let info = notification.userInfo!
+        let keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        containerView.snp.remakeConstraints{ make in
+            make.bottom.equalToSuperview().inset(keyboardFrame.height)
+            make.left.right.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(70)
+        }
+
+    }
+
+    @objc func dismissKeyboard(){
+        containerView.snp.remakeConstraints{ make in
+            make.bottom.left.right.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(70)
         }
     }
 }
