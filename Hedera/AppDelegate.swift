@@ -41,12 +41,12 @@ class ModelCoordinator{
 
 class ViewModelCoordinator{
     let practiceViewModel: VMCardShowingScreen
-    let addWordViewModel: ViewModel
+    let addWordViewModel: VMWordAdd
     let dictionaryViewModel: VMDictionaryScreen
     init() {
         let model = ModelCoordinator()
         practiceViewModel = VMCardShowingScreen(database: model.dictionary)
-        addWordViewModel = ViewModel(translator: model.translator,
+        addWordViewModel = VMWordAdd(translator: model.translator,
                                      database: model.dictionary,
                                      checker: model.translationChecker)
         dictionaryViewModel = VMDictionaryScreen(storage: model.dictionary,
@@ -56,7 +56,7 @@ class ViewModelCoordinator{
 
 class ViewControllerCoordinator{
     let practiceScreen: CardShowingViewController
-    let wordAddScreen: ViewController
+    let wordAddScreen: WordAddViewController
     let dictionaryScreen: DictionaryViewController
     public let tabViewController: UITabBarController
     private let tabBarimageInsets = UIEdgeInsetsMake(2, 2, 2, 2)
@@ -70,7 +70,7 @@ class ViewControllerCoordinator{
         practiceScreen.tabBarItem.imageInsets = tabBarimageInsets
         practiceScreen.tabBarItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: selectedTextColor], for: .selected)
 
-        wordAddScreen = ViewController()
+        wordAddScreen = WordAddViewController()
         wordAddScreen.viewModel = viewModel.addWordViewModel
         wordAddScreen.tabBarItem = UITabBarItem(title: "add", image: #imageLiteral(resourceName: "addingInactive"), selectedImage: #imageLiteral(resourceName: "addingActive"))
         wordAddScreen.tabBarItem.imageInsets = tabBarimageInsets

@@ -17,7 +17,7 @@ struct TranslationViewModel {
     let translations: [String]
 }
 
-class ViewModel {
+class VMWordAdd {
     //Dependencies
     private let translator: TranslationProvider
     private let database: Storage

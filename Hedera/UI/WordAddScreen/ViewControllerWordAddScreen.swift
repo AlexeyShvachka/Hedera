@@ -4,15 +4,15 @@ import ReactiveCocoa
 import ReactiveSwift
 import Result
 
-class ViewController: UIViewController {
+class WordAddViewController: UIViewController {
     let inputField = UserInput()
-    public var viewModel: ViewModel!
+    public var viewModel: VMWordAdd!
     let header = Header("Word add")
     let resultView = RequestResultContainer()
     let addToDatabaseButton = AddToDatabaseButton()
 }
 
-extension ViewController{
+extension WordAddViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
@@ -92,7 +92,7 @@ extension ViewController{
     }
 }
 
-extension ViewController {
+extension WordAddViewController {
     var safeArea: UILayoutGuide {
         get {
             return self.view.safeAreaLayoutGuide
@@ -160,13 +160,13 @@ extension ViewController {
     }
 }
 
-extension ViewController:  UITextFieldDelegate  {
+extension WordAddViewController:  UITextFieldDelegate  {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool{
         return string != " "
     }
 }
 
-fileprivate extension ViewController {
+fileprivate extension WordAddViewController {
     func show(_ state: StateToShow){
         print(state)
         resultView.show(state)
