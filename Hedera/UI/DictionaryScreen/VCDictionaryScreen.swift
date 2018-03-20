@@ -67,11 +67,12 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
 
 extension DictionaryViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        searchContainer.resignFirstResponder()
         layout.expandCell(at: indexPath.item)
-
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        searchContainer.resignFirstResponder()
         layout.colapseCell(at: indexPath.item)
     }
 }
