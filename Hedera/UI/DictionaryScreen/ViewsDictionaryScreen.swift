@@ -164,7 +164,7 @@ class DictionaryCellView: UICollectionViewCell{
         allTranslations.font = UIFont.preferredFont(forTextStyle: .body)
     }
 
-    func configure(_ viewModel: DictionaryEntety){
+    func configure(_ viewModel: DictionaryEntity){
         switch viewModel {
         case .regular(let word):
             wordLabel.text = word.text

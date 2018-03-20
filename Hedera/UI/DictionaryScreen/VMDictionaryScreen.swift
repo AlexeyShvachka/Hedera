@@ -3,7 +3,7 @@ import ReactiveSwift
 import Result
 
 
-enum DictionaryEntety{
+enum DictionaryEntity{
     case regular(Word)
     case waitng(String)
 
@@ -19,7 +19,7 @@ enum DictionaryEntety{
 }
 
 class VMDictionaryScreen{
-    let enteties: Property<[DictionaryEntety]>
+    let enteties: Property<[DictionaryEntity]>
     let searchString = MutableProperty<String>("")
 
     init(storage: StorageOutput,
@@ -27,7 +27,7 @@ class VMDictionaryScreen{
         enteties =  storage.allWords
             .combineLatest(with: checker.words)
             .map{ (translated, waiting) in
-              return waiting.map{DictionaryEntety.waitng($0)} +       translated.map{DictionaryEntety.regular($0)}}
+              return waiting.map{DictionaryEntity.waitng($0)} +       translated.map{DictionaryEntity.regular($0)}}
             .combineLatest(with: searchString)
             .map{(elements, userSearch) in
                 return elements.filter{$0.contains(userSearch)}}
