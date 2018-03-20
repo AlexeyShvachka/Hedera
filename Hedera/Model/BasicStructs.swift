@@ -35,10 +35,6 @@ extension Word: Equatable{
         return lhs.text == rhs.text
     }
 }
-struct WordWithTranslations{
-    let word: Word
-    let translations: [String]
-}
 
 struct Feedback : Codable {
     let word: String
@@ -83,4 +79,43 @@ public enum Phase : Int16, Codable{
         }
     }
 }
+
+struct DataModel: Codable {
+    struct Head : Codable {}
+
+    struct Text : Codable {
+        let text: String
+    }
+
+    struct Tr : Codable {
+        let text: String
+        let pos: String
+        let syn: [Text]?
+        let mean: [Text]?
+        let ex: [AltTranslation]?
+    }
+
+    struct AltTranslation: Codable{
+        let text: String
+        let tr: [Text]?
+    }
+
+    struct Def: Codable{
+        let text: String
+        let pos: String
+        let tr: [Tr]?
+    }
+
+    let head: Head
+    let def: [Def]?
+}
+
+extension DataModel {
+    var isEmpty: Bool {
+        get {
+            return def == nil || def!.isEmpty
+        }
+    }
+}
+
 

@@ -4,24 +4,15 @@ import ReactiveSwift
 import ReactiveCocoa
 
 class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLayout  {
-
-    public var viewModel : VMDictionaryScreen!
     var collectionView : DictionaryCollectionView!
     var searchBar = DictionarySearch()
     private let layout = DictionaryCollectionLayout()
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.searchString <~ searchBar.reactive.continuousTextValues.skipNil()
-
-        collectionView.reactive.reloadData <~ viewModel.enteties.map{_ in return ()}
-    }
+    var searchContainer: TopShadowContainer!
+    var viewModel: VMDictionaryScreen!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let header = Header("Dictionary")
-
-        let containerView = TopPart(label: header, search: searchBar )
+        searchContainer = TopShadowContainer(searchBar)
 
         self.view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
 
@@ -29,34 +20,64 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        self.view.addSubview(collectionView)
-        self.view.addSubview(containerView)
-        containerView.snp.makeConstraints{ make in
-            make.top.left.right.equalTo(self.view.safeAreaLayoutGuide)
-            make.height.equalTo(120)
+        self.view.addSubviews(collectionView, searchContainer)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(setKeyboardUp),
+                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               object: nil)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(dismissKeyboard),
+                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               object: nil)
+
+        searchContainer.snp.makeConstraints{ make in
+            make.bottom.left.right.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(70)
         }
 
         collectionView.snp.makeConstraints{ make in
-            make.left.right.bottom.equalTo(self.view.safeAreaLayoutGuide)
-            make.top.equalTo(containerView.snp.bottom)
+            make.left.right.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalTo(searchContainer.snp.top)
+        }
+
+        viewModel.searchString <~ searchBar.reactive.continuousTextValues.skipNil()
+        collectionView.reactive.reloadData <~ viewModel.enteties.map{_ in return ()}
+    }
+
+    @objc func setKeyboardUp(notification: Notification){
+        let info = notification.userInfo!
+        let keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+
+        searchContainer.snp.remakeConstraints{ make in
+            make.bottom.equalToSuperview().inset(keyboardFrame.height)
+            make.left.right.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(70)
+        }
+    }
+
+    @objc func dismissKeyboard(){
+        searchContainer.snp.remakeConstraints{ make in
+            make.bottom.left.right.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(70)
         }
     }
 }
 
 extension DictionaryViewController: UICollectionViewDelegate{
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        searchContainer.resignFirstResponder()
         layout.expandCell(at: indexPath.item)
-
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        searchContainer.resignFirstResponder()
         layout.colapseCell(at: indexPath.item)
     }
 }
 
 extension DictionaryViewController : UICollectionViewDataSource{
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return  viewModel.enteties.value.count
     }

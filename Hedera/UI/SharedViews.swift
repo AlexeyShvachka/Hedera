@@ -17,51 +17,6 @@ class Header: UILabel{
 
 }
 
-class UserInput: UITextField {
-
-    let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 5);
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        clearButtonMode = .whileEditing
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 4)
-        self.layer.shadowOpacity = 0.07
-        self.layer.shadowRadius = 7.0
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = #colorLiteral(red: 0.5921568627, green: 0.5921568627, blue: 0.5921568627, alpha: 1)
-        autocorrectionType = .no
-        autocapitalizationType = .none
-        placeholder = "Czech word to translate"
-        textColor = .black
-        backgroundColor = .white
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.layer.cornerRadius = frame.height/2
-    }
-
-
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, padding)
-    }
-
-    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, padding)
-    }
-
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, padding)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-
-
 class FilledView: UIView {
     private let fillShape = CAShapeLayer()
     public let label = UILabel()
@@ -99,7 +54,6 @@ class FilledView: UIView {
 
     }
 }
-
 
 class RoundButton: UIButton {
     override init(frame: CGRect) {

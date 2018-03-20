@@ -4,18 +4,18 @@ import Result
 
 class VMCardShowingScreen{
     private let database: Storage
-    let currentWord : Property<Word?>
+    public let currentWord : Property<Word?>
 
     init(database: Storage) {
         self.database = database
         currentWord = database.remainingToday.first
     }
 
-    @objc func wordWasGuessed() {
+    @objc public func wordWasGuessed() {
         database.registerFeedback(true, for: currentWord.value!.text, at: .now)
     }
 
-    @objc func wordWasNotGuessed(){
+    @objc public func wordWasNotGuessed(){
         database.registerFeedback(true, for: currentWord.value!.text, at: .now)
     }
 }

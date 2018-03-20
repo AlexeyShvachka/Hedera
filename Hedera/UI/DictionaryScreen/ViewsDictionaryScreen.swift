@@ -4,68 +4,28 @@ import SnapKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class TopPart: UIView{
-
-    var label: UILabel!
-    var search: DictionarySearch!
-
-    let searchField = UIStackView()
-    let stack = UIStackView()
-
-    init(label: UILabel, search: DictionarySearch) {
-
+class TopShadowContainer: UIView{
+    init(_ view: DictionarySearch) {
         super.init(frame: .zero)
-        self.label = label
-        self.search = search
         self.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
-        self.layer.shadowRadius = 7
+        self.layer.shadowRadius = 3
         self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowOffset = CGSize(width: 0, height: 10)
-        label.setContentHuggingPriority(UILayoutPriority(rawValue: 1750), for: .vertical)
-        search.layer.shadowColor = UIColor.black.cgColor
-        search.layer.shadowOpacity = 0.3
-        search.layer.borderWidth = 1
-        search.layer.borderColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1).cgColor
-        label.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
+        self.layer.shadowOpacity = 0.5
+        addSubview(view)
 
-        stack.axis = .vertical
-        stack.alignment = .fill
-        stack.distribution = .equalSpacing
-
-        stack.addArrangedSubview(label)
-        stack.addArrangedSubview(search)
-        self.addSubview(stack)
-
+        view.snp.makeConstraints{ make in
+            make.edges.equalToSuperview().inset(UIEdgeInsetsMake(16, 20, 16, 20))
+        }
     }
 
-    override func layoutSubviews() {
-        stack.snp.remakeConstraints{ make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 5, left: 20, bottom: 10, right: 20))
-        }
-        search.snp.remakeConstraints{ make in
-            make.height.equalTo(label)//.dividedBy(2)
-        }
+    @discardableResult override func resignFirstResponder() -> Bool {
+        return subviews[0].resignFirstResponder()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
-extension DictionarySearch: UITextFieldDelegate{
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.leftView = nil
-        textField.placeholder = nil
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        textField.leftView = imageView
-        textField.placeholder = "search"
-    }
-}
-
 
 class DictionarySearch: UITextField{
     private let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 5);
@@ -78,7 +38,7 @@ class DictionarySearch: UITextField{
         clearButtonMode = .whileEditing
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 0, height: 4)
-        self.layer.shadowOpacity = 0.07
+        self.layer.shadowOpacity = 0.3
         self.layer.shadowRadius = 7.0
         self.layer.borderWidth = 0.5
         self.layer.borderColor = #colorLiteral(red: 0.5921568627, green: 0.5921568627, blue: 0.5921568627, alpha: 1)
@@ -126,7 +86,20 @@ class DictionarySearch: UITextField{
         fatalError("init(coder:) has not been implemented")
     }
 }
-    
+
+extension DictionarySearch: UITextFieldDelegate{
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.leftView = nil
+        textField.placeholder = nil
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        textField.leftView = imageView
+        textField.placeholder = "search"
+    }
+}
+
+
 class DictionaryCollectionView: UICollectionView{
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
