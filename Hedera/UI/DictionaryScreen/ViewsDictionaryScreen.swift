@@ -18,6 +18,10 @@ class TopShadowContainer: UIView{
         }
     }
 
+    @discardableResult override func resignFirstResponder() -> Bool {
+        return subviews[0].resignFirstResponder()
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

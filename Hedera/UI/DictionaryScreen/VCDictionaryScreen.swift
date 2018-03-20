@@ -5,18 +5,17 @@ import ReactiveCocoa
 
 class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLayout  {
 
-    public var viewModel : VMDictionaryScreen!
+    public var viewModel : VMDictionaryScreen! {
+        didSet {
+            setDataBindings()
+        }
+    }
+
     var collectionView : DictionaryCollectionView!
     var searchBar = DictionarySearch()
     private let layout = DictionaryCollectionLayout()
     var searchContainer: TopShadowContainer!
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.searchString <~ searchBar.reactive.continuousTextValues.skipNil()
 
-        collectionView.reactive.reloadData <~ viewModel.enteties.map{_ in return ()}
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchContainer = TopShadowContainer(searchBar)
@@ -27,8 +26,7 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        self.view.addSubview(collectionView)
-        self.view.addSubview(searchContainer)
+        self.view.addSubviews(collectionView, searchContainer)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(setKeyboardUp),
@@ -49,11 +47,13 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
             make.left.right.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(searchContainer.snp.top)
         }
+        setDataBindings()
     }
 
     @objc func setKeyboardUp(notification: Notification){
         let info = notification.userInfo!
         let keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+
         searchContainer.snp.remakeConstraints{ make in
             make.bottom.equalToSuperview().inset(keyboardFrame.height)
             make.left.right.equalTo(self.view.safeAreaLayoutGuide)
@@ -67,15 +67,21 @@ class DictionaryViewController: UIViewController, UICollectionViewDelegateFlowLa
             make.height.equalTo(70)
         }
     }
+
+    private func setDataBindings() {
+        viewModel.searchString <~ searchBar.reactive.continuousTextValues.skipNil()
+        collectionView.reactive.reloadData <~ viewModel.enteties.map{_ in return ()}
+    }
 }
 
 extension DictionaryViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        searchContainer.resignFirstResponder()
         layout.expandCell(at: indexPath.item)
-
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        searchContainer.resignFirstResponder()
         layout.colapseCell(at: indexPath.item)
     }
 }
