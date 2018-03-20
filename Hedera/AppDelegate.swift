@@ -36,7 +36,6 @@ class ModelCoordinator{
         wrapper = CoreDataWrapper(persistentContainer.viewContext, phaseManager)
         dictionary = PersistantStorage(with: wrapper, countStorage: UserDefaults.standard)
         translationChecker = TranslationChecker(translator, dictionary, 2.seconds, persistentContainer.viewContext)
-        
     }
 }
 

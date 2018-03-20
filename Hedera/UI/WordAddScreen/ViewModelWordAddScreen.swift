@@ -2,30 +2,6 @@ import Foundation
 import ReactiveSwift
 import Result
 
-
-extension DataModel{
-    var translations: [String]? {
-        get {
-            if let defArray = self.def{
-                if !defArray.isEmpty{
-                    return self.def?[0].tr?.map{$0.text}
-                }
-            }
-            return []
-        }
-    }
-    var definition: String?  {
-        get{
-            if (self.def ?? []).isEmpty {
-                return ""
-            }
-            else{
-                return def![0].text
-            }
-        }
-    }
-}
-
 enum StateToShow {
     case loading
     case added(Word)
@@ -43,18 +19,17 @@ struct TranslationViewModel {
 
 class ViewModel {
     //Dependencies
-    private let translator : TranslationProvider
-    private let database : Storage
-    private let checker : TranslationChecker
+    private let translator: TranslationProvider
+    private let database: Storage
+    private let checker: TranslationChecker
+    
     private let state = MutableProperty<StateToShow>(.empty)
-    private var wasJustAdded: Bool = false
     private let definition = MutableProperty<String>("")
     private let translations = MutableProperty<[String]>([])
-    let userSearch = MutableProperty<String>("")
-    let stateToObserve : Property<StateToShow>
+    public let userSearch = MutableProperty<String>("")
+    public let stateToObserve: Property<StateToShow>
 
-
-    func saveCurrent(){
+    public func saveCurrent(){
         let search = userSearch.value
         switch stateToObserve.value {
         case .loading, .networkError:
@@ -125,6 +100,29 @@ class ViewModel {
                 let loading: SignalProducer<StateToShow, NoError> = SignalProducer(value: .loading)
                 // loading state will always be emited first and then result of translation
                 return loading.concat(translationResponse)
+            }
+        }
+    }
+}
+
+extension DataModel{
+    var translations: [String]? {
+        get {
+            if let defArray = self.def{
+                if !defArray.isEmpty{
+                    return self.def?[0].tr?.map{$0.text}
+                }
+            }
+            return []
+        }
+    }
+    var definition: String?  {
+        get{
+            if (self.def ?? []).isEmpty {
+                return ""
+            }
+            else{
+                return def![0].text
             }
         }
     }

@@ -7,9 +7,8 @@ enum DictionaryEntety{
     case regular(Word)
     case waitng(String)
 
-    func contains(_ search: String) -> Bool {
+    public func contains(_ search: String) -> Bool {
         if search.isEmpty { return true}
-
         switch self {
         case .regular(let word):
             return word.text.localizedCaseInsensitiveContains(search) || word.bestTranslation.localizedCaseInsensitiveContains(search)
@@ -23,7 +22,7 @@ class VMDictionaryScreen{
     let enteties: Property<[DictionaryEntety]>
     let searchString = MutableProperty<String>("")
 
-    init(storage: StorageOutput ,
+    init(storage: StorageOutput,
          checker: TranslationChecker){
         enteties =  storage.allWords
             .combineLatest(with: checker.words)

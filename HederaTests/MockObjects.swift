@@ -1,4 +1,3 @@
-import Foundation
 import CoreData
 import ReactiveSwift
 @testable import Hedera

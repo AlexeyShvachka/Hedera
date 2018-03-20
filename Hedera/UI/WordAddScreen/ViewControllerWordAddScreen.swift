@@ -10,14 +10,9 @@ class ViewController: UIViewController {
     let header = Header("Word add")
     let resultView = RequestResultContainer()
     let addToDatabaseButton = AddToDatabaseButton()
-
 }
 
 extension ViewController{
-    @objc func save(){
-        viewModel.saveCurrent()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9921568627, blue: 0.9921568627, alpha: 1)
@@ -73,7 +68,7 @@ extension ViewController{
             }
         }
 
-        header.snp.remakeConstraints{ make in
+        header.snp.makeConstraints{ make in
             make.top.equalTo(safeArea).inset(10)
             make.left.equalTo(safeArea).inset(15)
             make.right.equalTo(safeArea).inset(15)
@@ -91,11 +86,13 @@ extension ViewController{
         super.viewWillAppear(animated)
         setEmpty()
     }
+
+    @objc func save(){
+        viewModel.saveCurrent()
+    }
 }
 
-
 extension ViewController {
-
     var safeArea: UILayoutGuide {
         get {
             return self.view.safeAreaLayoutGuide
@@ -128,68 +125,38 @@ extension ViewController {
     }
 
     @objc func dismissKeyboard(){
-
         if resultView.isHidden {
-            inputField.snp.remakeConstraints{ make in
-                make.centerY.equalTo(safeArea)
-                make.left.equalTo(safeArea).inset(10)
-                make.right.equalTo(safeArea).inset(10)
-                make.height.equalTo(safeArea).dividedBy(12)
-            }
-        } else {
+            placeInputOnScreenCenter()
+        }
+        else {
+            // set adding button to compact form
             addToDatabaseButton.snp.remakeConstraints{ make in
                 make.bottom.equalTo(safeArea).offset(-20)
                 make.left.right.equalTo(safeArea).inset(20)
                 make.height.equalTo(safeArea).dividedBy(10)
             }
-
-        }
-        resultView.snp.remakeConstraints{ make in
-            make.top.equalTo(inputField.snp.bottom).offset(10)
-            make.left.right.equalTo(safeArea).inset(30)
-            make.bottom.equalTo(addToDatabaseButton.snp.top).offset(-10)
+            //set resultView to com[act form
+            resultView.snp.remakeConstraints{ make in
+                make.top.equalTo(inputField.snp.bottom).offset(10)
+                make.left.right.equalTo(safeArea).inset(30)
+                make.bottom.equalTo(addToDatabaseButton.snp.top).offset(-10)
+            }
         }
     }
 
-    func setEmpty(){
+    private func setEmpty(){
         addToDatabaseButton.isHidden = true
         resultView.isHidden = true
+        placeInputOnScreenCenter()
+    }
+
+    private func placeInputOnScreenCenter() {
         inputField.snp.remakeConstraints{ make in
             make.centerY.equalTo(safeArea)
             make.left.equalTo(safeArea).inset(10)
             make.right.equalTo(safeArea).inset(10)
             make.height.equalTo(safeArea).dividedBy(11)
         }
-    }
-
-    func setConstraints(){
-        let vStack = UIStackView()
-
-        addToDatabaseButton.addTarget(self, action: #selector(save), for: .primaryActionTriggered)
-
-
-
-        resultView.snp.makeConstraints{make in
-            make.left.right.equalTo(vStack)
-        }
-        inputField.snp.makeConstraints{ make in
-            make.left.equalTo(vStack).offset(10)
-            make.right.equalTo(vStack).offset(-10)
-            make.height.equalTo(vStack).dividedBy(10)
-        }
-
-        addToDatabaseButton.snp.makeConstraints{ make in
-            make.left.equalTo(vStack).offset(10)
-            make.right.equalTo(vStack).offset(-10)
-            make.height.equalTo(vStack).dividedBy(10)
-
-        }
-
-        self.view.addSubview(vStack)
-        vStack.snp.makeConstraints{ make in
-            make.edges.equalTo(self.view.safeAreaLayoutGuide)//.inset(UIEdgeInsetsMake(50, 0, 0, 0))
-        }
-
     }
 }
 
@@ -199,13 +166,9 @@ extension ViewController:  UITextFieldDelegate  {
     }
 }
 
-
 fileprivate extension ViewController {
     func show(_ state: StateToShow){
         print(state)
         resultView.show(state)
     }
 }
-
-
-

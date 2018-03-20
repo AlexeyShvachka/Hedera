@@ -21,7 +21,6 @@ public extension Int{
     }
 }
 
-
 public extension Double{
     var seconds : TimeInterval {
         return TimeInterval(self)
@@ -42,10 +41,6 @@ public extension Double{
         return (self * 30).days
     }
 }
-
-
-
-
 
 extension Date{
     static var now : Date {

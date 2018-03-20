@@ -123,7 +123,6 @@ class RequestResultContainer: UIView{
 }
 
 class AddToDatabaseButton: UIButton{
-
     private let colours = [#colorLiteral(red: 0, green: 0.8980392157, blue: 0.6039215686, alpha: 1).cgColor, #colorLiteral(red: 0, green: 0.7882352941, blue: 0.8392156863, alpha: 1).cgColor ]
     private let gradient: CAGradientLayer = CAGradientLayer()
 
@@ -170,6 +169,47 @@ class AddToDatabaseButton: UIButton{
         backgroundColor = .white        //background for inactive state
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class UserInput: UITextField {
+    private let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 5);
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        clearButtonMode = .whileEditing
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 4)
+        self.layer.shadowOpacity = 0.07
+        self.layer.shadowRadius = 7.0
+        self.layer.borderWidth = 0.5
+        self.layer.borderColor = #colorLiteral(red: 0.5921568627, green: 0.5921568627, blue: 0.5921568627, alpha: 1)
+        autocorrectionType = .no
+        autocapitalizationType = .none
+        placeholder = "Czech word to translate"
+        textColor = .black
+        backgroundColor = .white
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = frame.height/2
+    }
+
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return UIEdgeInsetsInsetRect(bounds, padding)
+    }
+
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return UIEdgeInsetsInsetRect(bounds, padding)
+    }
+
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return UIEdgeInsetsInsetRect(bounds, padding)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
