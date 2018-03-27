@@ -27,7 +27,7 @@ class Translator : TranslationProvider{
     }
 
     fileprivate func encodedQuery(_ word: String) -> String?{
-        let APIBase = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20170610T174815Z.a1d2bc2e066864e7.5489d30457da1fc00396b2ae45b207883171aa42&lang=cs-en&text="
+        let APIBase = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20170610T174815Z.a1d2bc2e066864e7.5489d30457da1fc00396b2ae45b207883171aa42&lang=cs-ru&text="
         let query = APIBase + word
         return  query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
     }
